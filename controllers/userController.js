@@ -3,17 +3,17 @@ const jwt = require('jsonwebtoken');
 const users = require('../models/userModel');
 const Joi = require('joi');
 
-// Mock secret for JWT
-const JWT_SECRET = 'mysecretkey';
+// This are for the Mock secret for JWT
+const JWT_SECRET = 'mysecretkey';  
 
-// Registration logic
+// This part are for the registration logic
 const register = (req, res) => {
     const { error } = validateRegister(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const { username, email, password } = req.body;
     
-    // Check if user already exists
+    // It will check if user already exists
     const existingUser = users.find(u => u.email === email);
     if (existingUser) return res.status(400).send('User already exists.');
 
@@ -29,7 +29,7 @@ const register = (req, res) => {
     res.status(201).send('User registered successfully!');
 };
 
-// Login logic
+// This part will be for login logic
 const login = (req, res) => {
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -46,7 +46,7 @@ const login = (req, res) => {
     res.send({ token });
 };
 
-// Profile logic (protected route)
+// This part is for the profile logic (protected route)
 const getProfile = (req, res) => {
     const user = users.find(u => u.id === req.user.id);
     if (!user) return res.status(404).send('User not found.');
@@ -58,7 +58,7 @@ const getProfile = (req, res) => {
     });
 };
 
-// Input validation
+// When the user input the necessary information it be validated here
 const validateRegister = (data) => {
     const schema = Joi.object({
         username: Joi.string().min(3).required(),
@@ -76,4 +76,4 @@ const validateLogin = (data) => {
     return schema.validate(data);
 };
 
-module.exports = { register, login, getProfile };
+module.exports = { register, login, getProfile };  // Export the functions for use in routes/user.js
